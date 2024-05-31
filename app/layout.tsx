@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
+import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const fontSans = FontSans({
 	subsets: ["latin"],
@@ -19,7 +21,17 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body className={fontSans.className}>{children}</body>
+			<body className="mx-auto flex min-h-screen max-w-[880px] flex-col gap-9 px-10 text-base md:gap-20 md:py-20">
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
+					<Navbar />
+					<div className={fontSans.className}>{children}</div>
+				</ThemeProvider>
+			</body>
 		</html>
 	);
 }
