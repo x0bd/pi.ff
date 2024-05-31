@@ -31,5 +31,6 @@ export default function compressFileName(fileName: any): string {
 		return compressedFileName;
 	} else {
 		// If the fileName is shorter than the maximum length, return it as is
+		return fileName.trim();
 	}
 }

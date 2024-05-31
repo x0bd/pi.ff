@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { useToast } from "./ui/use-toast";
 import { Action } from "@/types";
 import convertFile from "@/lib/convert";
+import { Skeleton } from "./ui/skeleton";
 
 const extensions = {
 	audio: ["flac", "mp3", "ogg", "wma", "m4a", "wav"],
@@ -152,7 +153,23 @@ const Dropzone = () => {
 	};
 
 	if (actions.length) {
-		return <div className="space-y-6"></div>;
+		return (
+			<div className="space-y-6">
+				{actions.map((action: Action, i: any) => (
+					<div
+						key={i}
+						className="w-full py-4 spce-y-2 lg:py-0 relative cursor-pointer rounded-xl border h-fit lg:h-20 px-4 lg:px-10 flex flex-wrap lg:flex-nowrap items-center justify-between"
+					>
+						{!isLoaded && (
+							<Skeleton className="h-full w-full -ml-10 cursor-progress absolute rounded-xl" />
+						)}
+						<div className="flex gap-4 items-center">
+							<span className="text-2xl text-orange-500"></span>
+						</div>
+					</div>
+				))}
+			</div>
+		);
 	}
 };
 
