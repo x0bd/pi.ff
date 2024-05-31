@@ -121,11 +121,39 @@ const Dropzone = () => {
 					ffmpegRef.current,
 					action
 				);
-			} catch (err) {}
+				tmpActions = tmpActions.map((elt) =>
+					elt === action
+						? {
+								...elt,
+								isConverted: true,
+								isConverting: false,
+								url,
+								output,
+						  }
+						: elt
+				);
+				setActions(tmpActions);
+			} catch (err) {
+				tmpActions = tmpActions.map((elt) =>
+					elt === action
+						? {
+								...elt,
+								isConverted: false,
+								isConverting: false,
+								isError: true,
+						  }
+						: elt
+				);
+				setActions(tmpActions);
+			}
 		}
+		setIsDone(true);
+		setIsConverting(false);
 	};
 
-	return <div>Dropzone</div>;
+	if (actions.length) {
+		return <div className="space-y-6"></div>;
+	}
 };
 
 export default Dropzone;
