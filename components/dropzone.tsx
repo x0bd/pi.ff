@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import {
 	Select,
@@ -21,6 +21,7 @@ import { Badge } from "./ui/badge";
 import { BiSolidError } from "react-icons/bi";
 import { MdDone } from "react-icons/md";
 import { ImSpinner3 } from "react-icons/im";
+import loadFFmpeg from "@/lib/load-ff";
 
 const extensions = {
 	audio: ["flac", "mp3", "ogg", "wma", "m4a", "wav"],
@@ -207,8 +208,29 @@ const Dropzone = () => {
 			if (!action.to) tmpIsReady = false;
 		});
 		setIsReady(tmpIsReady);
-		
-		const deleteAction = 
+
+		const deleteAction = (action: Action): void => {
+			setActions(actions.filter((elt) => elt !== action));
+			setFiles(files.filter((elt) => elt.name !== action.fileName));
+		};
+
+		useEffect(() => {
+			if (!actions.length) {
+				setIsDone(false);
+				setFiles([]);
+				setIsReady(false);
+				setIsConverting(false);
+			} else checkIsReady();
+		}, [actions]);
+		useEffect(() => {
+			load();
+		}, []);
+
+		const load = async () => {
+			const ffmpeg_response: FFmpeg = await loadFFmpeg();
+			ffmpegRef.current = ffmpeg_response;
+			setIsLoaded;
+		};
 	};
 
 	// Rendered
