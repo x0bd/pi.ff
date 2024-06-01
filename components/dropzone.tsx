@@ -22,6 +22,8 @@ import { BiSolidError } from "react-icons/bi";
 import { MdDone } from "react-icons/md";
 import { ImSpinner3 } from "react-icons/im";
 import loadFFmpeg from "@/lib/load-ff";
+import { FFmpeg } from "@ffmpeg/ffmpeg";
+import ReactDropzone from "react-dropzone";
 
 const extensions = {
 	audio: ["flac", "mp3", "ogg", "wma", "m4a", "wav"],
@@ -292,8 +294,35 @@ const Dropzone = () => {
 											setDefaultValues("video");
 										}
 										setSelected(value);
+										updateAction(action.fileName, value);
 									}}
-								></Select>
+									value={selected}
+								>
+									<SelectTrigger className="w-32 outline-none focus:outline-none focus:ring-0 text-center text-muted-foreground bg-background text-md font-medium">
+										<SelectValue placeholder="..." />
+									</SelectTrigger>
+									<SelectContent className="h-fit">
+										{action.fileType.includes("image") && (
+											<div className="grid grid-cols-2 gap-2 w-fit">
+												{extensions.image.map(
+													(elt, i) => (
+														<div
+															key={i}
+															className="col-span-i text-center"
+														>
+															<SelectItem
+																value={elt}
+																className="mx-auto"
+															>
+																{elt}
+															</SelectItem>
+														</div>
+													)
+												)}
+											</div>
+										)}
+									</SelectContent>
+								</Select>
 							</div>
 						)}
 					</div>
@@ -301,6 +330,8 @@ const Dropzone = () => {
 			</div>
 		);
 	}
+
+	return <div>Hello World</div>;
 };
 
 export default Dropzone;
