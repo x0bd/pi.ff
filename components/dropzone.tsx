@@ -159,6 +159,58 @@ const Dropzone = () => {
 		setIsConverting(false);
 	};
 
+	const handleUpload = (data: Array<any>): void => {
+		handleExitHover();
+
+		setFiles(data);
+		const tmp: Action[] = [];
+		data.forEach((file: any) => {
+			const formData = new FormData();
+			tmp.push({
+				fileName: file.name,
+				fileSize: file.size,
+				from: file.name.slice(
+					((file.name.lastIndexOf(".") - 1) >>> 0) + 2
+				),
+				to: null,
+				fileType: file.type,
+				isConverted: false,
+				isConverting: false,
+				isError: false,
+				file,
+			});
+		});
+		setActions(tmp);
+	};
+
+	const handleHover = (): void => setIsHover(true);
+	const handleExitHover = (): void => setIsHover(false);
+	const updateAction = (fileName: String, to: String) => {
+		setActions(
+			actions.map((action): Action => {
+				if (action.fileName === fileName) {
+					console.log("FILE FOUND");
+					return {
+						...action,
+						to,
+					};
+				}
+
+				return action;
+			})
+		);
+	};
+
+	const checkIsReady = (): void => {
+		let tmpIsReady = true;
+		actions.forEach((action: Action) => {
+			if (!action.to) tmpIsReady = false;
+		});
+		setIsReady(tmpIsReady);
+		
+		const deleteAction = 
+	};
+
 	// Rendered
 	if (actions.length) {
 		return (
