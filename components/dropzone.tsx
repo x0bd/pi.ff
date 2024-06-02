@@ -24,6 +24,7 @@ import { ImSpinner3 } from "react-icons/im";
 import loadFFmpeg from "@/lib/load-ff";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import ReactDropzone from "react-dropzone";
+import { LucideFileSymlink, UploadCloud } from "lucide-react";
 
 const extensions = {
 	audio: ["flac", "mp3", "ogg", "wma", "m4a", "wav"],
@@ -248,7 +249,7 @@ const Dropzone = () => {
 							<Skeleton className="h-full w-full -ml-10 cursor-progress absolute rounded-xl" />
 						)}
 						<div className="flex gap-4 items-center">
-							<span className="text-2xl text-orange-600">
+							<span className="text-2xl text-emerald-600">
 								{fileToIcon(action.fileType)}
 							</span>
 							<div className="flex items-center gap-1 w-96">
@@ -468,7 +469,62 @@ const Dropzone = () => {
 		);
 	}
 
-	return <div>Hello World</div>;
+	return (
+		<ReactDropzone
+			onDrop={handleUpload}
+			onDragEnter={handleHover}
+			onDragLeave={handleExitHover}
+			accept={acceptedFiles}
+			onDropRejected={() => {
+				handleExitHover();
+				toast({
+					variant: "destructive",
+					title: "Error uploading your files",
+					description: "Allowed Files: Audio, Video, Images",
+					duration: 5000,
+				});
+			}}
+			onError={() => {
+				handleExitHover();
+				toast({
+					variant: "destructive",
+					title: "Error uploading your files",
+					description: "Allowed Files: Audio, Video, Images.",
+					duration: 5000,
+				});
+			}}
+		>
+			{({ getRootProps, getInputProps }) => (
+				<div
+					{...getRootProps()}
+					className="bg-background h-72 lg:h-80 xl:h-96 rounded-3xl shadow-sm  border-secondary border-2 border-dashed cursor-pointer flex items-center justify-center"
+				>
+					<input {...getInputProps()} />
+					<div className="space-y-4 text-foreground">
+						{isHover ? (
+							<>
+								<div className="justify-center flex text-6xl">
+									<LucideFileSymlink />
+								</div>
+								<h3 className="text-center font-medium text-2xl">
+									Yes, right there
+								</h3>
+							</>
+						) : (
+							<>
+								<div className="justify-center flex text-6xl">
+									<UploadCloud />
+								</div>
+								<h3 className="text-center font-medium text-2xl">
+									Click, or drop your files here
+								</h3>
+							</>
+						)}
+					</div>
+				</div>
+			)}
+		</ReactDropzone>
+	);
 };
 
 export default Dropzone;
