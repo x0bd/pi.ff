@@ -438,10 +438,30 @@ const Dropzone = () => {
 									: "Download"}
 								<MdDownload />
 							</Button>
-							<Button size="lg" onClick={reset}></Button>
+							<Button
+								size="lg"
+								onClick={reset}
+								variant="outline"
+								className="rounded-xl"
+							>
+								Convert Another File(s)
+							</Button>
 						</div>
 					) : (
-						<Button></Button>
+						<Button
+							size="lg"
+							disabled={!isReady || isConverting}
+							className="rounded-xl font-semibold relative py-4 text-md flex items-center
+							 w-44"
+						>
+							{isConverting ? (
+								<span className="animate-spin text-lg">
+									<ImSpinner3 />
+								</span>
+							) : (
+								<span>Convert Now!</span>
+							)}
+						</Button>
 					)}
 				</div>
 			</div>
