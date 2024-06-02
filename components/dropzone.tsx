@@ -19,7 +19,7 @@ import compressFileName from "@/lib/compress-file-name";
 import bytesToSize from "@/lib/bytes-to-size";
 import { Badge } from "./ui/badge";
 import { BiSolidError } from "react-icons/bi";
-import { MdDone } from "react-icons/md";
+import { MdClose, MdDone, MdDownload } from "react-icons/md";
 import { ImSpinner3 } from "react-icons/im";
 import loadFFmpeg from "@/lib/load-ff";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
@@ -210,29 +210,29 @@ const Dropzone = () => {
 			if (!action.to) tmpIsReady = false;
 		});
 		setIsReady(tmpIsReady);
+	};
 
-		const deleteAction = (action: Action): void => {
-			setActions(actions.filter((elt) => elt !== action));
-			setFiles(files.filter((elt) => elt.name !== action.fileName));
-		};
+	useEffect(() => {
+		if (!actions.length) {
+			setIsDone(false);
+			setFiles([]);
+			setIsReady(false);
+			setIsConverting(false);
+		} else checkIsReady();
+	}, [actions]);
+	useEffect(() => {
+		load();
+	}, []);
 
-		useEffect(() => {
-			if (!actions.length) {
-				setIsDone(false);
-				setFiles([]);
-				setIsReady(false);
-				setIsConverting(false);
-			} else checkIsReady();
-		}, [actions]);
-		useEffect(() => {
-			load();
-		}, []);
+	const load = async () => {
+		const ffmpeg_response: FFmpeg = await loadFFmpeg();
+		ffmpegRef.current = ffmpeg_response;
+		setIsLoaded;
+	};
 
-		const load = async () => {
-			const ffmpeg_response: FFmpeg = await loadFFmpeg();
-			ffmpegRef.current = ffmpeg_response;
-			setIsLoaded;
-		};
+	const deleteAction = (action: Action): void => {
+		setActions(actions.filter((elt) => elt !== action));
+		setFiles(files.filter((elt) => elt.name !== action.fileName));
 	};
 
 	// Rendered
@@ -321,12 +321,129 @@ const Dropzone = () => {
 												)}
 											</div>
 										)}
+										{action.fileType.includes("video") && (
+											<Tabs
+												defaultValue={defaultValues}
+												className="w-full"
+											>
+												<TabsList className="w-full">
+													<TabsTrigger
+														value="video"
+														className="w-full"
+													>
+														Video
+													</TabsTrigger>
+													<TabsTrigger
+														value="audio"
+														className="w-full"
+													>
+														Audio
+													</TabsTrigger>
+												</TabsList>
+												<TabsContent value="video">
+													<div className="grid grid-cols-2 gap-2 w-fit">
+														{extensions.image.map(
+															(elt, i) => (
+																<div
+																	key={i}
+																	className="col-span-1 text-center"
+																>
+																	<SelectItem
+																		value={
+																			elt
+																		}
+																		className="mx-auto"
+																	>
+																		{elt}
+																	</SelectItem>
+																</div>
+															)
+														)}
+													</div>
+												</TabsContent>
+												<TabsContent value="audio">
+													<div className="grid grid-cols-3 gap-2 w-fit">
+														{extensions.audio.map(
+															(elt, i) => (
+																<div
+																	key={i}
+																	className="col-span-1 text-center"
+																>
+																	<SelectItem
+																		value={
+																			elt
+																		}
+																		className="mx-auto"
+																	>
+																		{elt}
+																	</SelectItem>
+																</div>
+															)
+														)}
+													</div>
+												</TabsContent>
+											</Tabs>
+										)}
+										{action.fileType.includes("audio") && (
+											<div className="grid grid-cols-2 gap-2 w-fit">
+												{extensions.audio.map(
+													(elt, i) => (
+														<div
+															key={i}
+															className="col-span-1 text-center"
+														>
+															<SelectItem
+																value={elt}
+																className="mx-auto"
+															>
+																{elt}
+															</SelectItem>
+														</div>
+													)
+												)}
+											</div>
+										)}
 									</SelectContent>
 								</Select>
 							</div>
 						)}
+
+						{action.isConverted ? (
+							<Button
+								variant="outline"
+								onClick={() => download(action)}
+							>
+								Download
+							</Button>
+						) : (
+							<span
+								className="text-2xl text-foreground h-10 w-10 cursor-pointer hover:bg-muted rounded-full items-center justify-center "
+								onClick={() => deleteAction(action)}
+							>
+								<MdClose />
+							</span>
+						)}
 					</div>
 				))}
+				<div className="flex w-full justify-end">
+					{isDone ? (
+						<div className="space-y-4 w-fit">
+							<Button
+								size="lg"
+								className="rounded-xl font-semibold relative py-4 text-md flex gap-2 items-center w-full"
+								onClick={downloadAll}
+							>
+								{actions.length > 1
+									? "Download All"
+									: "Download"}
+								<MdDownload />
+							</Button>
+							<Button size="lg" onClick={reset}></Button>
+						</div>
+					) : (
+						<Button></Button>
+					)}
+				</div>
 			</div>
 		);
 	}
