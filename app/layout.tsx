@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
 	subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
 					disableTransitionOnChange
 				>
 					<Navbar />
+					<Toaster />
 					<div className={fontSans.className}>{children}</div>
 				</ThemeProvider>
 			</body>

@@ -454,6 +454,7 @@ const Dropzone = () => {
 							disabled={!isReady || isConverting}
 							className="rounded-xl font-semibold relative py-4 text-md flex items-center
 							 w-44"
+							onClick={convert}
 						>
 							{isConverting ? (
 								<span className="animate-spin text-lg">
