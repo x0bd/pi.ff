@@ -29,9 +29,13 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					<Navbar />
-					<Toaster />
-					<div className={fontSans.className}>{children}</div>
+					<div className={fontSans.className}>
+						<Navbar />
+						<Toaster />
+						<div className="pt-32 min-h-screen lg:pt-36 2xl:pt-44 container max-w-4xl lg:max-w-6xl 2xl:max-w-7xl">
+							{children}
+						</div>
+					</div>
 				</ThemeProvider>
 			</body>
 		</html>

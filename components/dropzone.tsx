@@ -169,7 +169,7 @@ const Dropzone = () => {
 		setFiles(data);
 		const tmp: Action[] = [];
 		data.forEach((file: any) => {
-			const formData = new FormData();
+			const formData = new FormData(); // Why aren't we using this form data
 			tmp.push({
 				fileName: file.name,
 				fileSize: file.size,
@@ -226,9 +226,9 @@ const Dropzone = () => {
 	}, []);
 
 	const load = async () => {
-		const ffmpeg_response: FFmpeg = await loadFFmpeg();
-		ffmpegRef.current = ffmpeg_response;
-		setIsLoaded;
+		const ffmpegResponse: FFmpeg = await loadFFmpeg();
+		ffmpegRef.current = ffmpegResponse;
+		setIsLoaded(true);
 	};
 
 	const deleteAction = (action: Action): void => {
@@ -309,7 +309,7 @@ const Dropzone = () => {
 													(elt, i) => (
 														<div
 															key={i}
-															className="col-span-i text-center"
+															className="col-span-1 text-center"
 														>
 															<SelectItem
 																value={elt}
@@ -342,7 +342,7 @@ const Dropzone = () => {
 													</TabsTrigger>
 												</TabsList>
 												<TabsContent value="video">
-													<div className="grid grid-cols-2 gap-2 w-fit">
+													<div className="grid grid-cols-3 gap-2 w-fit">
 														{extensions.image.map(
 															(elt, i) => (
 																<div
@@ -418,7 +418,7 @@ const Dropzone = () => {
 							</Button>
 						) : (
 							<span
-								className="text-2xl text-foreground h-10 w-10 cursor-pointer hover:bg-muted rounded-full items-center justify-center "
+								className="cursor-pointer hover:bg-muted rounded-full h-10 w-10 flex items-center justify-center text-2xl text-foreground"
 								onClick={() => deleteAction(action)}
 							>
 								<MdClose />
@@ -498,7 +498,7 @@ const Dropzone = () => {
 			{({ getRootProps, getInputProps }) => (
 				<div
 					{...getRootProps()}
-					className="bg-background h-72 lg:h-80 xl:h-96 rounded-3xl shadow-sm  border-secondary border-2 border-dashed cursor-pointer flex items-center justify-center"
+					className="bg-background h-72 lg:h-80 xl:h-96 rounded-3xl shadow-sm border-secondary border-2 border-dashed cursor-pointer flex items-center justify-center"
 				>
 					<input {...getInputProps()} />
 					<div className="space-y-4 text-foreground">
